@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+    <% include ../layouts/head %>
+    <body>
+        <% include ../layouts/header %>
+        <main>
+            <div class="w3-row w3-margin">
+                <div class="w3-col s12 m4">
+                    <img src="<%= products.imageURL %>" class="w3-border w3-padding" alt="Image Product" style="width: 100%">
+                </div>
+                <div class="w3-col s12 m6 w3-padding-large">
+                    <h3><%= products.title %></h3>
+                    <p><%= products.price %></p>
+                    <p><%= products.description %></p>
+                </div>
+            </div>
+        </main>
+    </body>
+</html>

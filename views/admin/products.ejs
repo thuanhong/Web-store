@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<% include ../layouts/head %>
+<body>
+<% include ../layouts/header %>
+
+<main>
+    <% if (products.length > 0) { %>
+        <div class="w3-row">
+            <% for (let product of products) { %>
+                <div class="w3-col l3 m6 s12">
+                    <div class="w3-margin w3-card w3-light-gray w3-hover-shadow">
+                        <div class="w3-container w3-center">
+                            <h3><%= product.title %></h3>
+                            <img src="<%= product.imageURL %>" alt="Product Image">
+                            <h5><%= product.description %></h5>
+                            <h6><%= product.price %></h6>
+
+                            <div class="w3-section">
+                                <a class="w3-button w3-green" href="/admin/edit-product/<%= product.id %>?edit=true">Edit</a>
+                                <a class="w3-button w3-blue" href="/product/<%= product.id %>">Detail</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    <% } else { %>
+        <p class="w3-center w-3-xxlarge">No Product</p>
+    <% } %>
+</main>
+</body>
+</html>
