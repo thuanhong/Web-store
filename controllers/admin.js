@@ -14,14 +14,14 @@ exports.postAddProduct = (req, res, next) => {
     let price = req.body.price;
     let description = req.body.description;
     let imgURL = req.body.url;
-    Product.create({
+    req.user.createProduct({
         title: title,
         price: price,
         imageURL: imgURL,
-        description: description,
+        description: description
     }).then(result => {
         console.log(result);
-        res.redirect('/');
+        res.redirect('/admin/products');
     }).catch(error => {
         console.log(error)
     });
@@ -33,17 +33,20 @@ exports.getEditProduct = (req, res, next) => {
 		return res.redirect('/');
 	}
 	const prodId = req.params.productID;
-	Product.findByPk(prodId).then(product => {
-		if (!product) {
-			return res.redirect('/');
-		}
-		res.render('admin/edit-product', {
-			path: '/admin/products',
-			title_page: 'Admin Products',
-			action: 'Edit ',
-			editing: true,
-			product : product
-		})
+	req.user.getProducts({where: {id: prodId}})
+		.then(products => {
+			console.log(products);
+			let product = products[0];
+			if (!product) {
+				return res.redirect('/');
+			}
+			res.render('admin/edit-product', {
+				path: '/admin/products',
+				title_page: 'Admin Products',
+				action: 'Edit ',
+				editing: true,
+				product : product
+			})
 	}).catch(error => {
 		console.log(error)
 	});
@@ -64,7 +67,10 @@ exports.postEditProduct = (req, res, next) => {
 	    	product.save().then(() => {
 	    		console.log("SUCCESSFULLY")
 		    });
-	    }).catch();
+		    res.redirect('admin/products');
+	    }).catch(error => {
+	    	console.log(error)
+    });
 
 };
 
@@ -80,5 +86,19 @@ exports.getAllProducts = (req, res, next) => {
       .catch(error => {
           console.log(error);
       });
+};
 
+exports.deleteProduct = (req, res, next) => {
+	let productID = req.params.productID;
+	Product.findByPk(productID)
+		.then(product => {
+			product.destroy();
+		})
+		.then(result => {
+			console.log('DELETE SUCCESSFULLY');
+			res.redirect('/admin/products')
+		})
+		.catch(error => {
+			console.log(error)
+		});
 };
