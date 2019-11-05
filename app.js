@@ -11,6 +11,8 @@ const User = require('./models/users');
 const Product = require('./models/products');
 const Cart = require('./models/carts');
 const CartItem = require('./models/cart-items');
+const Order = require('./models/order');
+const OrderItem = require('./models/order-item');
 
 
 app.set('view engine', 'ejs');
@@ -40,19 +42,24 @@ User.hasOne(Cart);
 Cart.belongsTo(User);
 Cart.belongsToMany(Product, {through: CartItem});
 Product.belongsToMany(Cart, {through: CartItem});
+Order.belongsTo(User);
+User.hasMany(Order);
+Order.belongsToMany(Product, {through: OrderItem});
+Product.belongsToMany(Order, {through: OrderItem});
 
-database.sync({force: true})
+database.sync()
   .then(() => {
-    User.findByPk(1)
-      .then(user => {
-        if (!user) {
-          return User.create({name: "Neo", email: "thuanhong357@gmail.com"})
-        }
-        return user
-      })
+    return User.findByPk(1); })
+  .then(user => {
+    if (!user) {
+      return User.create({name: "Neo", email: "thuanhong357@gmail.com"})
+    }
+    return user
+  })
+  .then(user => {
+    return user.createCart()
   })
   .then(result => {
-    console.log(result);
     app.listen(8000, () => {
       console.log("Server running at http://localhost:8000")
     });

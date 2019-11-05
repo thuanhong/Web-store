@@ -16,10 +16,11 @@
                                     <h5><%= product.description %></h5>
                                     <h6><%= product.price %></h6>
 
-                                    <div class="w3-section">
-                                        <a class="w3-button w3-green">Add to cart</a>
+                                    <form method="post" action="/cart" class="w3-section">
+                                        <input type="hidden" name="productId" value="<%= product.id %>">
+                                        <button type="submit" class="w3-button w3-green">Add to cart</button>
                                         <a class="w3-button w3-blue" href="/product/<%= product.id %>">Detail</a>
-                                    </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
