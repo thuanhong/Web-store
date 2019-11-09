@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <% include ../layouts/head %>
+    <body>
+        <% include ../layouts/header %>
+        <main>
+            <% if (orders.length > 0) { %>
+                <ul>
+                    <% orders.forEach(order => { %>
+                        <li>
+                            <h3><%= order.id %></h3>
+                            <ul>
+                                <% order.products.forEach(product => { %>
+                                    <li><%= product.title %></li>
+                                <% }) %>
+                            </ul>
+                        </li>
+                    <% }) %>
+                </ul>
+            <% } else { %>
+                <h2>Nothing order</h2>    
+            <% } %>
+        </main>
+    </body>
+</html>

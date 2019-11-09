@@ -19,6 +19,12 @@
                             </li>
                         <% }) %>
                     </ul>
+                    <hr/>
+                    <div class="w3-display-container">
+                        <form action="/order" method="post">
+                            <button type="submit">Submit</button>
+                        </form>
+                    </div>
                 <% } else { %>
                     <h3 class="w3-display-topmiddle">No products in cart</h3>
                 <% } %>

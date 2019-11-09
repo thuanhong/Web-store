@@ -59,7 +59,7 @@ database.sync()
   .then(user => {
     return user.createCart()
   })
-  .then(result => {
+  .then(() => {
     app.listen(8000, () => {
       console.log("Server running at http://localhost:8000")
     });
