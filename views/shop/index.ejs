@@ -13,7 +13,9 @@
                                 <div class="w3-container w3-center">
                                     <h3><%= product.title %></h3>
                                     <img src="<%= product.imageURL %>" alt="Product Image">
-                                    <h5><%= product.description %></h5>
+                                    <div style="height: 10vh; overflow-y: hidden" >
+                                        <p><%= product.description %></p>
+                                    </div>
                                     <h6><%= product.price %></h6>
 
                                     <form method="post" action="/cart" class="w3-section">
