@@ -1,7 +1,7 @@
 const Products = require("../models/products");
 
 exports.getAllProduct = (req, res, next) => {
-	Products.FetchAll()
+	Products.fetchAll()
 		.then(([rows, feildData]) => {
 			res.render('shop/products-list', {
 				products: rows,

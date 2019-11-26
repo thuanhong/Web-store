@@ -10,21 +10,19 @@ exports.getAddProduct = (req, res, next) => {
 };
 
 exports.postAddProduct = (req, res, next) => {
-    let title = req.body.title;
-    let price = req.body.price;
-    let description = req.body.description;
-    let imgURL = req.body.url;
-    req.user.createProduct({
-        title: title,
-        price: price,
-        imageURL: imgURL,
-        description: description
-    }).then(result => {
-        console.log(result);
-        res.redirect('/admin/products');
-    }).catch(error => {
-        console.log(error)
-    });
+    const title = req.body.title;
+    const price = req.body.price;
+    const description = req.body.description;
+	const imgURL = req.body.url;
+	const product = new Product(title, price, description, imgURL)
+	console.log(product)
+	product.save()
+		.then(result => {
+			console.log(result);
+			res.redirect('/admin/products');
+		}).catch(error => {
+			console.log(error)
+		});
 };
 
 exports.getEditProduct = (req, res, next) => {
@@ -75,7 +73,7 @@ exports.postEditProduct = (req, res, next) => {
 };
 
 exports.getAllProducts = (req, res, next) => {
-    Product.findAll()
+    Product.fetchAll()
       .then(products => {
           res.render('admin/products', {
               products: products,
