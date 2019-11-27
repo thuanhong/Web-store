@@ -19,9 +19,9 @@
                                     <h6><%= product.price %></h6>
 
                                     <form method="post" action="/cart" class="w3-section">
-                                        <input type="hidden" name="productId" value="<%= product.id %>">
+                                        <input type="hidden" name="productId" value="<%= product._id %>">
                                         <button type="submit" class="w3-button w3-green">Add to cart</button>
-                                        <a class="w3-button w3-blue" href="/product/<%= product.id %>">Detail</a>
+                                        <a class="w3-button w3-blue" href="/product/<%= product._id %>">Detail</a>
                                     </form>
                                 </div>
                             </div>
