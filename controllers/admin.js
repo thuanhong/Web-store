@@ -14,8 +14,8 @@ exports.postAddProduct = (req, res, next) => {
     const price = req.body.price;
     const description = req.body.description;
 	const imgURL = req.body.url;
-	new Product(title, price, description, imgURL).save()
-		.then(result => {
+	new Product(title, price, description, imgURL, null, req.user._id).save()
+		.then(() => {
 			res.redirect('/admin/products');
 		}).catch(error => {
 			console.error(error)

@@ -19,11 +19,11 @@ app.use((req, res, next) => {
   User.findById('5dde036c1c9d4400004083fb')
     .then(user => {
       req.user = user
+      next();
     })
     .catch(error => {
       console.error(error)
     })
-  next();
 });
 
 app.use('/admin', adminData.route);
