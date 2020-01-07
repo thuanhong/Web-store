@@ -13,7 +13,7 @@
                                 <form class="w3-row" method="post" action="/cart-delete">
                                     <p class="w3-col m4">Title : <%= product.title %></p>
                                     <p class="w3-col m4">Quantity : <%= product.cartItem.quantity %></p>
-                                    <input type="hidden" name="productId" value="<%= product.id %>"/>
+                                    <input type="hidden" name="productId" value="<%= product._id %>"/>
                                     <button type="submit" style="margin-top: 1vh"; class="w3-col m4 w3-button w3-red">Delete</button>
                                 </form>
                             </li>
