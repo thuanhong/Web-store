@@ -5,7 +5,7 @@ const shopRouter = require('./routes/shop');
 const bodyPaser = require('body-parser');
 const path = require('path');
 const errorController = require('./controllers/error');
-const mongoConnect = require('./database/database').mongoConnect;
+const mongoose = require('mongoose')
 
 const User = require('./models/users')
 
@@ -30,6 +30,10 @@ app.use('/admin', adminData.route);
 app.use(shopRouter);
 app.use(errorController.get404);
 
-mongoConnect(() => {
+mongoose.connect('mongodb+srv://thuanhong:tIatFdS7yMxIhdvQ@cluster0-hyxsy.mongodb.net/test?retryWrites=true&w=majority')
+.then(() => {
   app.listen(3000)
+})
+.catch(error => {
+  console.error(error)
 })
