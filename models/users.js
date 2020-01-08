@@ -77,19 +77,37 @@ class User {
 		)
 	}
 
-	addOrders() {
-		const db = getDB()
-		return db.collection('orders').insertOne({item: this.cart})
-			.then(() => {
-				this.cart = []
-				db.collection('user').updateOne(
-					{_id: new ObjectId(this._id)},
-					{$set: {cart: this.cart}}
-				)
+	getOrders() {
+		const db = getDB();
+
+		return db.collection('orders').find().toArray()
+			.then(orders => {
+				return orders;
 			})
 			.catch(error => {
 				console.error(error)
 			})
+	}
+
+	addOrders() {
+		const db = getDB()
+
+		return this.getCart().then(products => {
+			db.collection('orders').insertOne({item: products, user: {
+				_id: new ObjectId(this._id),
+				name: this.name
+			}})
+				.then(() => {
+					this.cart = []
+					return db.collection('user').updateOne(
+						{_id: new ObjectId(this._id)},
+						{$set: {cart: this.cart}}
+					)
+				})
+				.catch(error => {
+					console.error(error)
+				})
+		})
 	}
 
 	static findById(userId) {

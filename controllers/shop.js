@@ -10,7 +10,7 @@ exports.getAllProduct = (req, res, next) => {
 			})
 		})
 		.catch(error => {
-			console.log("Error in controller/shop getAllProduct", error);
+			console.error("Error in controller/shop getAllProduct", error);
 		});
 };
 
@@ -22,7 +22,7 @@ exports.getIndex = (req, res, next) => {
 			title_page: "Home Page"
 		});
 	}).catch(error => {
-		console.log(error);
+		console.error(error);
 	});
 };
 
@@ -37,7 +37,7 @@ exports.getProduct = (req, res, next) => {
 			});
 		})
 		.catch(error => {
-			console.log(error);
+			console.error(error);
 		});
 };
 
@@ -50,7 +50,9 @@ exports.getCart = (req, res, next) => {
 				products : products
 			});
 		})
-		.catch(err => {console.error(err)});
+		.catch(err => {
+			console.error(err)
+		});
 };
 
 exports.getCheckout = (req, res, next) => {
@@ -81,12 +83,12 @@ exports.postCartDelete = (req, res, next) => {
 			res.redirect('/cart');
 		})
 		.catch(error => {
-			console.log("Error : ", error);
+			console.error("Error : ", error);
 		})
 }
 
 exports.getUserOrder = (req, res, next) => {
-	req.user.getOrders({include : ['products']})
+	req.user.getOrders()
 		.then(orders => {
 			res.render('shop/order', {
 				path: '/order',
@@ -95,7 +97,7 @@ exports.getUserOrder = (req, res, next) => {
 			})
 		})
 		.catch(error => {
-			console.log(error);
+			console.error(error);
 		});
 }
 
@@ -105,6 +107,6 @@ exports.postUserOrder = (req, res, next) => {
 			res.redirect('/order');
 		})
 		.catch(err => {
-			console.log(err);
+			console.error(err);
 		});
 }
