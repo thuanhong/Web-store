@@ -3,22 +3,22 @@
     <% include ../layouts/head %>
     <body>
         <% include ../layouts/header %>
-        <main>
+        <main class="w3-display-container">
             <% if (orders.length > 0) { %>
-                <ul>
+                <ul class="w3-ul w3-card-4 w3-display-topmiddle" style="width: 50%">
                     <% orders.forEach(order => { %>
                         <li>
-                            <h3><%= order.id %></h3>
+                            <h3><%= order._id %></h3>
                             <ul>
-                                <% order.products.forEach(product => { %>
-                                    <li><%= product.title %></li>
+                                <% order.item.forEach(product => { %>
+                                    <li>Title: <%= product.title %> | Quantity: <%= product.quantity %></li>
                                 <% }) %>
                             </ul>
                         </li>
                     <% }) %>
                 </ul>
             <% } else { %>
-                <h2>Nothing order</h2>    
+                <center><h2>Not found order</h2></center>
             <% } %>
         </main>
     </body>
