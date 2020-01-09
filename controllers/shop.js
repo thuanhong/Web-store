@@ -42,12 +42,13 @@ exports.getProduct = (req, res, next) => {
 };
 
 exports.getCart = (req, res, next) => {
-	req.user.getCart()
-		.then(products => {
+	req.user.populate('cart.productId').execPopulate()
+		.then(user => {
+			console.log(user.cart[0].productId)
 			res.render('shop/cart', {
 				path: '/cart',
 				title_page: 'Your Cart',
-				products : products
+				products : user.cart
 			});
 		})
 		.catch(err => {
@@ -68,7 +69,7 @@ exports.postCart = (req, res, next) => {
 		.then(product => {
 			return req.user.addToCart(product)
 		})
-		.then(result => {
+		.then(() => {
 			res.redirect('/cart')
 		})
 		.catch(error => {

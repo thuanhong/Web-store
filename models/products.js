@@ -19,6 +19,11 @@ const products = new Schema({
 		type: String,
 		required: true,
 		default: 'https://place-hold.it/300x200'
+	},
+	userId: {
+		type: Schema.Types.ObjectId,
+		required: true,
+		ref: 'User'
 	}
 });
 
