@@ -1,18 +1,5 @@
 const Products = require("../models/products");
-
-exports.getAllProduct = (req, res, next) => {
-	Products.fetchAll()
-		.then(([rows, feildData]) => {
-			res.render('shop/products-list', {
-				products: rows,
-				path: "/products",
-				title_page: "All products"
-			})
-		})
-		.catch(error => {
-			console.error("Error in controller/shop getAllProduct", error);
-		});
-};
+const Orders = require('../models/orders');
 
 exports.getIndex = (req, res, next) => {
 	Products.find().then(product => {
@@ -44,7 +31,6 @@ exports.getProduct = (req, res, next) => {
 exports.getCart = (req, res, next) => {
 	req.user.populate('cart.productId').execPopulate()
 		.then(user => {
-			console.log(user.cart[0].productId)
 			res.render('shop/cart', {
 				path: '/cart',
 				title_page: 'Your Cart',
@@ -55,13 +41,6 @@ exports.getCart = (req, res, next) => {
 			console.error(err)
 		});
 };
-
-exports.getCheckout = (req, res, next) => {
-  res.render('shop/checkout', {
-      path: '/checkout',
-      title_page: 'Checkout'
-  })
-}
 
 exports.postCart = (req, res, next) => {
 	const prodId = req.body.productId;
@@ -89,7 +68,7 @@ exports.postCartDelete = (req, res, next) => {
 }
 
 exports.getUserOrder = (req, res, next) => {
-	req.user.getOrders()
+	Orders.find({'user.userId': req.user._id})
 		.then(orders => {
 			res.render('shop/order', {
 				path: '/order',
@@ -103,7 +82,23 @@ exports.getUserOrder = (req, res, next) => {
 }
 
 exports.postUserOrder = (req, res, next) => {
-	req.user.addOrders()
+	req.user.populate('cart.productId').execPopulate()
+		.then(user => {
+			const products = user.cart.map(item => {
+				return {quantity : item.quantity, product: {...item.productId._doc}}
+			})
+			const newOrder = new Orders({
+				products: products,
+				user: {
+					name : user.name,
+					userId: user._id
+				}
+			})
+			return newOrder.save()
+		})
+		.then(() => {
+			return req.user.clearCart();
+		})
 		.then(() => {
 			res.redirect('/order');
 		})

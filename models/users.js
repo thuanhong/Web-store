@@ -33,4 +33,18 @@ User.methods.addToCart = function(product) {
 	return this.save()
 }
 
+User.methods.deleteProduct = function(prodId) {
+	const updatedCart = this.cart.filter(item => {
+		return item.productId._id.toString() !== prodId.toString()
+	})
+
+	this.cart = updatedCart;
+	return this.save()
+}
+
+User.methods.clearCart = function() {
+	this.cart = [];
+	return this.save()
+}
+
 module.exports = mongoose.model('User', User)

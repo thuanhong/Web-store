@@ -1,7 +1,6 @@
 <header>
     <nav class="w3-bar w3-teal w3-large">
         <a class="w3-bar-item w3-button w3-border-teal w3-bottombar w3-hover-none w3-hover-text-yellow w3-hover-border-yellow<%= path === '/' ? " w3-border-yellow w3-text-yellow" : '' %>" href="/">Shop</a>
-        <a class="w3-bar-item w3-button w3-border-teal w3-bottombar w3-hover-none w3-hide-small w3-hover-text-yellow w3-hover-border-yellow<%= path === '/products' ? " w3-border-yellow w3-text-yellow" : '' %>" href="/products">Products</a>
         <a class="w3-bar-item w3-button w3-border-teal w3-bottombar w3-hover-none w3-hide-small w3-hover-text-yellow w3-hover-border-yellow<%= path === '/cart' ? " w3-border-yellow w3-text-yellow" : '' %>" href="/cart">Cart</a>
         <a class="w3-bar-item w3-button w3-border-teal w3-bottombar w3-hover-none w3-hide-small w3-hover-text-yellow w3-hover-border-yellow<%= path === '/admin/add-product' ? " w3-border-yellow w3-text-yellow" : '' %>" href="/admin/add-product">Add Product</a>
         <a class="w3-bar-item w3-button w3-border-teal w3-bottombar w3-hover-none w3-hide-small w3-hover-text-yellow w3-hover-border-yellow<%= path === '/admin/products' ? " w3-border-yellow w3-text-yellow" : '' %>" href="/admin/products">Admin Product</a>
@@ -9,7 +8,6 @@
     </nav>
 
     <nav id="reponsive" class="w3-bar-block w3-teal w3-hide w3-hide-large w3-hide-medium w3-large">
-        <a class="w3-bar-item w3-button<%= path === '/products' ? " activated" : '' %>" href="/products">Products</a>
         <a class="w3-bar-item w3-button<%= path === '/cart' ? " activated" : '' %>" href="/cart">Cart</a>
         <a class="w3-bar-item w3-button<%= path === '/admin/add-product' ? " activated" : '' %>" href="/admin/add-product">Add Product</a>
         <a class="w3-bar-item w3-button<%= path === '/admin/products' ? " activated" : '' %>" href="/admin/products">Admin Product</a>
