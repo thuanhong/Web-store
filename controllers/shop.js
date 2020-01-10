@@ -6,7 +6,8 @@ exports.getIndex = (req, res, next) => {
 		res.render('shop/index', {
 			products: product,
 			path: '/',
-			title_page: "Home Page"
+			title_page: "Home Page",
+			isAuthenticated: false
 		});
 	}).catch(error => {
 		console.error(error);
