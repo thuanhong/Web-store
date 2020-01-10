@@ -1,13 +1,14 @@
 const express = require('express');
 const app = express();
-const adminData = require('./routes/admin');
-const shopRouter = require('./routes/shop');
 const bodyPaser = require('body-parser');
 const path = require('path');
 const errorController = require('./controllers/error');
 const mongoose = require('mongoose')
 const User = require('./models/users')
 
+const adminRouter = require('./routes/admin');
+const shopRouter = require('./routes/shop');
+const authRouter = require('./routes/auth');
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
@@ -26,8 +27,9 @@ app.use((req, res, next) => {
     })
 })
 
-app.use('/admin', adminData.route);
+app.use('/admin', adminRouter);
 app.use(shopRouter);
+app.use(authRouter);
 app.use(errorController.get404);
 
 mongoose.connect(
