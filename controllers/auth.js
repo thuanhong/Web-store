@@ -31,3 +31,19 @@ exports.postLogout = (req, res, next) => {
         res.redirect('/')
     })
 }
+
+exports.postSignUp = (req, res, next) => {
+    const user = req.body.username;
+    const email = req.body.email;
+    const password = req.body.password;
+    new User({
+        name: user,
+        email: email,
+        password: password
+    }).save().then(() => {
+        res.redirect('/auth/login')
+    })
+    .catch(err => {
+        console.error(err)
+    })
+}
