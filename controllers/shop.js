@@ -7,7 +7,7 @@ exports.getIndex = (req, res, next) => {
 			products: product,
 			path: '/',
 			title_page: "Home Page",
-			isAuthenticated: false
+			isAuthenticated: req.session.isLogged
 		});
 	}).catch(error => {
 		console.error(error);
@@ -22,6 +22,7 @@ exports.getProduct = (req, res, next) => {
 				products: row,
 				path: '/products',
 				title_page: row.title,
+				isAuthenticated: req.session.isLogged
 			});
 		})
 		.catch(error => {
@@ -30,12 +31,13 @@ exports.getProduct = (req, res, next) => {
 };
 
 exports.getCart = (req, res, next) => {
-	req.user.populate('cart.productId').execPopulate()
+	req.session.user.populate('cart.productId').execPopulate()
 		.then(user => {
 			res.render('shop/cart', {
 				path: '/cart',
 				title_page: 'Your Cart',
-				products : user.cart
+				products : user.cart,
+				isAuthenticated: req.session.isLogged
 			});
 		})
 		.catch(err => {
@@ -47,7 +49,7 @@ exports.postCart = (req, res, next) => {
 	const prodId = req.body.productId;
 	Products.findById(prodId)
 		.then(product => {
-			return req.user.addToCart(product)
+			return req.session.user.addToCart(product)
 		})
 		.then(() => {
 			res.redirect('/cart')
@@ -59,7 +61,7 @@ exports.postCart = (req, res, next) => {
 
 exports.postCartDelete = (req, res, next) => {
 	const prodId = req.body.productId;
-	req.user.deleteProduct(prodId)
+	req.session.user.deleteProduct(prodId)
 		.then(() => {
 			res.redirect('/cart');
 		})
@@ -69,12 +71,13 @@ exports.postCartDelete = (req, res, next) => {
 }
 
 exports.getUserOrder = (req, res, next) => {
-	Orders.find({'user.userId': req.user._id})
+	Orders.find({'user.userId': req.session.user._id})
 		.then(orders => {
 			res.render('shop/order', {
 				path: '/order',
 				title_page: 'Your order',
 				orders: orders,
+				isAuthenticated: req.session.isLogged
 			})
 		})
 		.catch(error => {
@@ -83,7 +86,7 @@ exports.getUserOrder = (req, res, next) => {
 }
 
 exports.postUserOrder = (req, res, next) => {
-	req.user.populate('cart.productId').execPopulate()
+	req.session.user.populate('cart.productId').execPopulate()
 		.then(user => {
 			const products = user.cart.map(item => {
 				return {quantity : item.quantity, product: {...item.productId._doc}}
@@ -98,7 +101,7 @@ exports.postUserOrder = (req, res, next) => {
 			return newOrder.save()
 		})
 		.then(() => {
-			return req.user.clearCart();
+			return req.session.user.clearCart();
 		})
 		.then(() => {
 			res.redirect('/order');
