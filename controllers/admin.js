@@ -4,8 +4,9 @@ exports.getAddProduct = (req, res, next) => {
     res.render('admin/edit-product', {
         path: "/admin/add-product",
         title_page: "Add Product",
-	      action: "Add ",
-	      editing: false
+		action: "Add ",
+		editing: false,
+		isAuthenticated: req.session.isLogged
     })
 };
 
@@ -44,7 +45,8 @@ exports.getEditProduct = (req, res, next) => {
 				title_page: 'Admin Products',
 				action: 'Edit ',
 				editing: true,
-				product : product
+				product : product,
+				isAuthenticated: req.session.isLogged
 			})
 	}).catch(error => {
 		console.error(error)
@@ -77,11 +79,12 @@ exports.postEditProduct = (req, res, next) => {
 exports.getAllProducts = (req, res, next) => {
     Product.find()
       .then(products => {
-          res.render('admin/products', {
-              products: products,
-              path: '/admin/products',
-              title_page: 'Admin Products'
-          })
+			res.render('admin/products', {
+				products: products,
+				path: '/admin/products',
+				title_page: 'Admin Products',
+				isAuthenticated: req.session.isLogged
+			})
       })
       .catch(error => {
           console.error(error);
