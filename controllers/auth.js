@@ -1,5 +1,15 @@
 const User = require('../models/users')
 const bcrypt = require('bcryptjs')
+const nodemailer = require('nodemailer')
+const sendGridTranporter = require('nodemailer-sendgrid-transport')
+require('dotenv').config()
+
+const tranporter = nodemailer.createTransport(sendGridTranporter({
+    auth: {
+        api_key: process.env.SEND_GRID_API
+    }
+}))
+
 
 exports.getLogin = (req, res, next) => {
     const show = req.query.show
@@ -18,7 +28,7 @@ exports.postLogin = (req, res, next) => {
     User.findOne({email: email})
         .then(userCollection => {
             if (!userCollection) {
-                res.redirect('/auth/login?show=Your email or password incorrect')
+                return res.redirect('/auth/login?show=Your email or password incorrect')
             }
             bcrypt.compare(password, userCollection.password)
                 .then(result => {
@@ -52,18 +62,29 @@ exports.postSignUp = (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
     User.findOne({email: email})
-        .then(email => {
-            if (email) {
+        .then(userDoc => {
+            if (userDoc) {
                 return res.redirect('/auth/login?show=Your email were exist')
             }
             return bcrypt.hash(password, 12)
                 .then(hashPassword => {
-                    new User({
+                    const newUser = new User({
                         name: user,
                         email: email,
                         password: hashPassword
-                    }).save().then(() => {
-                        res.redirect('/auth/login?show=Register successfull')
+                    })
+                    return newUser.save();
+                })
+                .then(() => {
+                    res.redirect('/auth/login?show=Register successfull, please check your mail to verify your account')
+                    return tranporter.sendMail({
+                        from: 'thuanhong@neo.com',
+                        to: email,
+                        subject: 'Verify your email',
+                        html: '<a href="https://github.com/">Click to verify</a>'   
+                    }, (err, info) => {
+                        if (err) console.error(err)
+                        if (info) console.log(info)
                     })
                 })
         })

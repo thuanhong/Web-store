@@ -8,8 +8,9 @@ const User = require('./models/users');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const csrf = require('csurf')
+require('dotenv').config()
 
-const MONGO_URI = 'mongodb+srv://thuanhong:tIatFdS7yMxIhdvQ@cluster0-hyxsy.mongodb.net/shop?retryWrites=true&w=majority'
+const MONGO_URI = process.env.MONGO_URI
 
 const store = new MongoDBStore({
   uri: MONGO_URI,
@@ -48,24 +49,13 @@ app.use((req, res, next) => {
   res.locals.csrfToken = req.csrfToken();
   next();
 })
-app.use(shopRouter);
 app.use('/auth', authRouter);
 app.use('/admin', adminRouter);
+app.use(shopRouter);
 app.use(errorController.get404);
 
-mongoose.connect(MONGO_URI)
+mongoose.connect(process.env.MONGO_URI)
 .then(() => {
-  // User.findOne()
-  //   .then(user => {
-  //     if (!user) {
-  //       const user = new User({
-  //         name: "Thuan",
-  //         email: 'thuanhong357@gmail.com',
-  //         cart: []
-  //       })
-  //       user.save()
-  //     }
-  //   })
   app.listen(3000)
 })
 .catch(error => {
