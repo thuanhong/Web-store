@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <% include ../layouts/head %>
+    <body>
+        <% include ../layouts/header %>
+        <main>
+            <div class="w3-half w3-display-middle w3-mobile w3-card-4">
+                <% include ../layouts/flash %>
+                <form class="w3-container tab" action="/auth/reset-password" method="POST">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+                    <div class="w3-section">
+                        <label class="w3-text-blue">Email</label>
+                        <input class="w3-input w3-border" type="email" name="email" required>
+                    </div>
+                    <div class="w3-section">
+                        <button class="w3-button w3-blue">Reset password</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </body>
+</html>

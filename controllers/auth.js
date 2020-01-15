@@ -1,5 +1,6 @@
 const User = require('../models/users')
 const bcrypt = require('bcryptjs')
+const crypto = require('crypto')
 const nodemailer = require('nodemailer')
 const sendGridTranporter = require('nodemailer-sendgrid-transport')
 require('dotenv').config()
@@ -12,12 +13,11 @@ const tranporter = nodemailer.createTransport(sendGridTranporter({
 
 
 exports.getLogin = (req, res, next) => {
-    const show = req.query.show
     res.render('auth/login', {
         path: '/auth/login',
         title_page: 'Login',
-        isAuthenticated: false,
-        show: show
+        error: req.flash('error'),
+        success: req.flash('success')
     })
 }
 
@@ -28,7 +28,8 @@ exports.postLogin = (req, res, next) => {
     User.findOne({email: email})
         .then(userCollection => {
             if (!userCollection) {
-                return res.redirect('/auth/login?show=Your email or password incorrect')
+                req.flash('error', 'Your email or password incorrect')
+                return res.redirect('/auth/login')
             }
             bcrypt.compare(password, userCollection.password)
                 .then(result => {
@@ -41,7 +42,8 @@ exports.postLogin = (req, res, next) => {
                             res.redirect('/')
                         })
                     } else {
-                        res.redirect('/auth/login?show=Your email or password incorrect')
+                        req.flash('error', 'Your email or password incorrect')
+                        res.redirect('/auth/login')
                     }
                 })
         })
@@ -64,7 +66,8 @@ exports.postSignUp = (req, res, next) => {
     User.findOne({email: email})
         .then(userDoc => {
             if (userDoc) {
-                return res.redirect('/auth/login?show=Your email were exist')
+                req.flash('error', 'Your email were exist')
+                return res.redirect('/auth/login')
             }
             return bcrypt.hash(password, 12)
                 .then(hashPassword => {
@@ -76,7 +79,8 @@ exports.postSignUp = (req, res, next) => {
                     return newUser.save();
                 })
                 .then(() => {
-                    res.redirect('/auth/login?show=Register successfull, please check your mail to verify your account')
+                    req.flash('success', 'Register successfull, please check your mail to verify your account')
+                    res.redirect('/auth/login')
                     return tranporter.sendMail({
                         from: 'thuanhong@neo.com',
                         to: email,
@@ -91,4 +95,49 @@ exports.postSignUp = (req, res, next) => {
         .catch(err => {
             console.error(err)
         })
+}
+
+exports.getResetPassword = (req, res, next) => {
+    res.render('auth/reset', {
+        path: '/auth/reset',
+        title_page: 'Reset password',
+        error: req.flash('error'),
+        success: req.flash('success')
+    });
+}
+
+exports.postResetPassword = (req, res, next) => {
+    crypto.randomBytes(32, (err, buffer) => {
+        if (err) {
+            console.error(err)
+            return res.redirect('/auth/reset-password')
+        }
+        const token = buffer.toString('hex')
+        User.findOne({email: req.body.email})
+        .then(userDoc => {
+            if (!userDoc) {
+                req.flash('error', 'No account with that email found')
+                return res.redirect('/auth/reset-password')
+            }
+            userDoc.resetToken = token;
+            userDoc.resetTokenExpired = Date.now() + 3600;
+            return userDoc.save();
+        })
+        .then(() => {
+            req.flash('success', 'Link reset have been sent to your email')
+            res.redirect('/auth/reset-password')
+            return tranporter.sendMail({
+                from: 'thuanhong@neo.com',
+                to: req.body.email,
+                subject: 'Reset password, link will expried after one hour',
+                html: `<a href="http://localhost:8080/auth/reset-password/${token}">Reset Password</a>`  
+            }, (err, info) => {
+                if (err) console.error(err)
+                if (info) console.log(info)
+            })
+        })
+        .catch(error => {
+            console.error(error)
+        })
+    })
 }

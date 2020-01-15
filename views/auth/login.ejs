@@ -6,17 +6,7 @@
 
         <main>
             <div class="w3-half w3-display-middle w3-mobile w3-card-4">
-                <% if (show) { %>
-                    <% if (show[0] === 'Y') { %>
-                        <div class="w3-panel w3-leftbar w3-pale-red w3-border-red" >
-                            <p><%= show %></p>
-                        </div>
-                    <% } else { %>
-                        <div class="w3-panel w3-leftbar w3-pale-green w3-border-green" >
-                            <p><%= show %></p>
-                        </div>
-                    <% } %>
-                <% } %>
+                <% include ../layouts/flash %>
                 <div class="w3-blue">
                     <div class="w3-row">
                         <h2 class="w3-half tablink w3-bottombar w3-hover-light-grey w3-padding w3-border-red" onclick="changeTab(this, 'login')">Login</h2>
@@ -28,11 +18,14 @@
                     <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
                     <div class="w3-section">
                         <label class="w3-text-blue">Email</label>
-                        <input class="w3-input w3-border" type="text" name="email" required>
+                        <input class="w3-input w3-border" type="email" name="email" required>
                     </div>
                     <div class="w3-section">
                         <label class="w3-text-blue">Password</label>
                         <input class="w3-input w3-border" type="password" name="password" required>
+                    </div>
+                    <div class="w3-section">
+                        <a href="/auth/reset-password">Forgot password ?</a>
                     </div>
                     <div class="w3-section">
                         <button class="w3-button w3-blue">Login</button>
