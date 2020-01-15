@@ -6,6 +6,9 @@
         <main>
             <div class="w3-half w3-display-middle w3-mobile w3-card-4">
                 <% include ../layouts/flash %>
+                <div class="w3-container w3-blue">
+                    <h2>Reset password</h2>
+                </div>
                 <form class="w3-container tab" action="/auth/reset-password" method="POST">
                     <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
                     <div class="w3-section">

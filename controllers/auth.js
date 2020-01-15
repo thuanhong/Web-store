@@ -120,7 +120,7 @@ exports.postResetPassword = (req, res, next) => {
                 return res.redirect('/auth/reset-password')
             }
             userDoc.resetToken = token;
-            userDoc.resetTokenExpired = Date.now() + 3600;
+            userDoc.resetTokenExpired = Date.now() + 3600000;
             return userDoc.save();
         })
         .then(() => {
@@ -140,4 +140,56 @@ exports.postResetPassword = (req, res, next) => {
             console.error(error)
         })
     })
+}
+
+exports.getNewPassword = (req, res, next) => {
+    const token = req.params.token;
+    User.findOne({resetToken: token, resetTokenExpired: {$gt: Date.now()}})
+        .then(user => {
+            if (!user) {
+                req.flash('error', "Your link don't exist or have been expired")
+                return res.redirect('/auth/reset-password')
+            }
+            res.render('auth/new-password', {
+                path: '/auth/new-password',
+                title_page: 'New Password',
+                // error: req.flash('error'),
+                // success: req.flash('success'),
+                userId: user._id,
+                userToken: token
+            })
+        })
+        .catch(error => {
+            console.error(error)
+        })
+}
+
+exports.postNewPassword = (req, res, next) => {
+    const token = req.params.token;
+    const userId = req.body.userId;
+    const password = req.body.password;
+    User.findOne({resetToken: token, resetTokenExpired: {$gt: Date.now()}, _id: userId})
+        .then(user => {
+            if (!user) {
+                req.flash('error', "Your link don't exist or have been expired")
+                return res.redirect('/auth/reset-password')
+            }
+            return bcrypt.hash(password, 12)
+                    .then(hashedPassword => {
+                        user.password = hashedPassword;
+                        user.resetToken = undefined;
+                        user.resetTokenExpired = undefined;
+                        return user.save()
+                    })
+                    .then(() => {
+                        req.flash('success', 'Reset password successful')
+                        res.redirect('/auth/login')
+                    })
+                    .catch(error => {
+                        console.error(error)
+                    })
+        })
+        .catch(error => {
+            console.error(error)
+        })
 }
