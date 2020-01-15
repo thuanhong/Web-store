@@ -7,6 +7,7 @@
             <a class="w3-bar-item w3-button w3-border-teal w3-bottombar w3-hover-none w3-hide-small w3-hover-text-yellow w3-hover-border-yellow<%= path === '/admin/add-product' ? " w3-border-yellow w3-text-yellow" : '' %>" href="/admin/add-product">Add Product</a>
             <a class="w3-bar-item w3-button w3-border-teal w3-bottombar w3-hover-none w3-hide-small w3-hover-text-yellow w3-hover-border-yellow<%= path === '/admin/products' ? " w3-border-yellow w3-text-yellow" : '' %>" href="/admin/products">Admin Product</a>
             <form action="/auth/logout" method="POST">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
                 <button class="w3-bar-item w3-button w3-border-teal w3-bottombar w3-hover-none w3-hide-small w3-hover-text-yellow w3-hover-border-yellow w3-right" type="submit">Logout</button>
             </form>
         <% } else { %>
@@ -22,6 +23,7 @@
             <a class="w3-bar-item w3-button<%= path === '/admin/add-product' ? " activated" : '' %>" href="/admin/add-product">Add Product</a>
             <a class="w3-bar-item w3-button<%= path === '/admin/products' ? " activated" : '' %>" href="/admin/products">Admin Product</a>
             <form action="/auth/logout" method="POST">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
                 <button class="w3-bar-item w3-button type="submit">Logout</button>
             </form>
         <% } else { %>

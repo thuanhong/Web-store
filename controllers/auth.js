@@ -17,22 +17,23 @@ exports.postLogin = (req, res, next) => {
 
     User.findOne({email: email})
         .then(userCollection => {
-            if (userCollection) {
-                bcrypt.compare(password, userCollection.password)
-                    .then(result => {
-                        if (result === true) {
-                            req.session.user = userCollection;
-                            req.session.isLogged = true;
-                            // Make sure session have been save before navigate
-                            req.session.save(error => {
-                                console.error(error)
-                                res.redirect('/')
-                            })
-                        }
-                    })
-            } else {
+            if (!userCollection) {
                 res.redirect('/auth/login?show=Your email or password incorrect')
             }
+            bcrypt.compare(password, userCollection.password)
+                .then(result => {
+                    if (result === true) {
+                        req.session.user = userCollection;
+                        req.session.isLogged = true;
+                        // Make sure session have been save before navigate
+                        req.session.save(error => {
+                            console.error(error)
+                            res.redirect('/')
+                        })
+                    } else {
+                        res.redirect('/auth/login?show=Your email or password incorrect')
+                    }
+                })
         })
         .catch(errror => {
             console.error(errror)
