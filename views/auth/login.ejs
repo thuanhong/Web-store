@@ -25,6 +25,7 @@
                 </div>
 
                 <form id="login" class="w3-container tab" action="/auth/login" method="POST">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
                     <div class="w3-section">
                         <label class="w3-text-blue">Email</label>
                         <input class="w3-input w3-border" type="text" name="email" required>
@@ -39,6 +40,7 @@
                 </form>
 
                 <form id='signup' class="w3-container tab" action="/auth/signup" method="POST" style="display: none">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
                     <div class="w3-section">
                         <label class="w3-text-blue">User name</label>
                         <input class="w3-input w3-border" type="text" name="username" required>

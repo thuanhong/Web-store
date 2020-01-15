@@ -11,6 +11,7 @@
                 <% products.forEach(product => { %>
                 <li class="w3-card-2 w3-margin">
                     <form class="w3-row" method="post" action="/cart-delete">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
                         <p class="w3-col m4">Title : <%= product.productId.title %></p>
                         <p class="w3-col m4">Quantity : <%= product.quantity %></p>
                         <input type="hidden" name="productId" value="<%= product.productId._id %>" />
@@ -23,11 +24,12 @@
             <hr />
             <div class="w3-display-container">
                 <form action="/order" method="post">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
                     <button type="submit">Submit</button>
                 </form>
             </div>
             <% } else { %>
-            <h3 class="w3-display-topmiddle">No products in cart</h3>
+                <h3 class="w3-display-topmiddle">No products in cart</h3>
             <% } %>
         </div>
 

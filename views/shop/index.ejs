@@ -21,6 +21,7 @@
                                         <a class="w3-button w3-blue" href="/product/<%= product._id %>">Detail</a>
                                         <% if(isAuthenticated) { %>
                                             <form method="post" action="/cart" style="display: inline">
+                                                <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
                                                 <input type="hidden" name="productId" value="<%= product._id %>">
                                                 <button type="submit" class="w3-button w3-green">Add to cart</button>
                                             </form>

@@ -9,6 +9,7 @@
             <h2><%= action %>product</h2>
         </div>
         <form class="w3-container" action="/admin/<% if (editing) { %>edit-product/<%= product._id %><% } else { %>add-product<% } %>" method="POST">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
             <div class="w3-section">
                 <label class="w3-text-blue">Title</label>
                 <input class="w3-input w3-border" type="text" name="title" value="<% if (editing) {%><%= product.title %><% } %>" required>

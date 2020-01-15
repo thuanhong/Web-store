@@ -6,7 +6,6 @@ exports.getAddProduct = (req, res, next) => {
         title_page: "Add Product",
 		action: "Add ",
 		editing: false,
-		isAuthenticated: req.session.isLogged
     })
 };
 
@@ -46,7 +45,6 @@ exports.getEditProduct = (req, res, next) => {
 				action: 'Edit ',
 				editing: true,
 				product : product,
-				isAuthenticated: req.session.isLogged
 			})
 	}).catch(error => {
 		console.error(error)
@@ -83,7 +81,6 @@ exports.getAllProducts = (req, res, next) => {
 				products: products,
 				path: '/admin/products',
 				title_page: 'Admin Products',
-				isAuthenticated: req.session.isLogged
 			})
       })
       .catch(error => {

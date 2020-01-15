@@ -20,7 +20,10 @@
 
                             <div class="w3-section">
                                 <a class="w3-button w3-green" href="/admin/edit-product/<%= product._id %>?edit=true">Edit</a>
-                                <a class="w3-button w3-blue" href="/admin/delete/<%= product._id %>">Delete</a>
+                                <form action="/admin/delete/<%= product._id %>">
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+                                    <button class="w3-button w3-blue" type="submit">Delete</button>
+                                </form>
                             </div>
                         </div>
                     </div>
