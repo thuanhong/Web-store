@@ -6,7 +6,6 @@ exports.getAddProduct = (req, res, next) => {
         title_page: "Add Product",
 		action: "Add ",
 		editing: false,
-		isAuthenticated: req.session.isLogged
     })
 };
 
@@ -25,7 +24,7 @@ exports.postAddProduct = (req, res, next) => {
 		.then(() => {
 			res.redirect('/admin/products');
 		}).catch(error => {
-			console.error(error)
+			next(new Error(error))
 		});
 };
 
@@ -46,10 +45,9 @@ exports.getEditProduct = (req, res, next) => {
 				action: 'Edit ',
 				editing: true,
 				product : product,
-				isAuthenticated: req.session.isLogged
 			})
 	}).catch(error => {
-		console.error(error)
+		next(new Error(error))
 	});
 };
 
@@ -71,23 +69,23 @@ exports.postEditProduct = (req, res, next) => {
 			res.redirect('/admin/products')
 		})
 	    }).catch(error => {
-	    	console.error(error)
+	    	next(new Error(error))
     });
 
 };
 
 exports.getAllProducts = (req, res, next) => {
-    Product.find()
+    Product.find({userId: req.user._id})
       .then(products => {
+		  	throw new Error("hoi bi ghe");
 			res.render('admin/products', {
 				products: products,
 				path: '/admin/products',
 				title_page: 'Admin Products',
-				isAuthenticated: req.session.isLogged
 			})
       })
-      .catch(error => {
-          console.error(error);
+      .catch(error => { 
+          next(new Error(error));
       });
 };
 
@@ -99,6 +97,6 @@ exports.deleteProduct = (req, res, next) => {
 			res.redirect('/admin/products')
 		})
 		.catch(error => {
-			console.error(error)
+			next(new Error(error))
 		});
 };

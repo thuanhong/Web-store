@@ -2,8 +2,20 @@ const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/auth');
 
-router.get('/auth/login', authController.getLogin);
-router.post('/auth/login', authController.postLogin);
-router.post('/auth/logout', authController.postLogout);
+const isLogged = (req, res, next) => {
+    if (req.session.isLogged) {
+        return res.redirect('/')
+    }
+    next();
+}
+
+router.get('/login', authController.getLogin);
+router.post('/login', authController.postLogin);
+router.post('/logout', authController.postLogout);
+router.post('/signup', authController.postSignUp);
+router.get('/reset-password', isLogged, authController.getResetPassword);
+router.post('/reset-password', isLogged, authController.postResetPassword);
+router.get('/reset-password/:token', authController.getNewPassword);
+router.post('/reset-password/:token', authController.postNewPassword);
 
 module.exports = router;

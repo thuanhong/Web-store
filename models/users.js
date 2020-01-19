@@ -11,6 +11,12 @@ const User = new mongoose.Schema({
 		type: String,
 		required: true
 	},
+	resetToken: String,
+	resetTokenExpired: Date,
+	password: {
+		type: String, 
+		required: true
+	},
 	cart: [
 		{
 			productId: {type: Schema.Types.ObjectId, ref: 'Products', required: true},
