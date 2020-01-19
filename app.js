@@ -41,8 +41,9 @@ app.use((req, res, next) => {
     req.user = user;
     next();
   })
-  .catch(errror => {
-    console.error(errror)
+  .catch(error => {
+    console.error(error)
+    next(new Error(error))
   })
 });
 
@@ -55,6 +56,13 @@ app.use('/auth', authRouter);
 app.use('/admin', adminRouter);
 app.use(shopRouter);
 app.use(errorController.get404);
+
+app.use((error, req, res, next) => {
+  res.status(500).render('error/error500', {
+    path: '',
+    title_page: 'Server Error',
+  });
+})
 
 mongoose.connect(process.env.MONGO_URI)
 .then(() => {

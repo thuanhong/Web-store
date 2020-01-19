@@ -9,7 +9,7 @@ exports.getIndex = (req, res, next) => {
 			title_page: "Home Page",
 		});
 	}).catch(error => {
-		console.error(error);
+		next(new Error(error));
 	});
 };
 
@@ -24,7 +24,7 @@ exports.getProduct = (req, res, next) => {
 			});
 		})
 		.catch(error => {
-			console.error(error);
+			next(new Error(error));
 		});
 };
 
@@ -37,8 +37,8 @@ exports.getCart = (req, res, next) => {
 				products : user.cart,
 			});
 		})
-		.catch(err => {
-			console.error(err)
+		.catch(error => {
+			next(new Error(error))
 		});
 };
 
@@ -52,7 +52,7 @@ exports.postCart = (req, res, next) => {
 			res.redirect('/cart')
 		})
 		.catch(error => {
-			console.error(error)
+			next(new Error(error))
 		})
 };
 
@@ -63,7 +63,7 @@ exports.postCartDelete = (req, res, next) => {
 			res.redirect('/cart');
 		})
 		.catch(error => {
-			console.error("Error : ", error);
+			next(new Error(error))
 		})
 }
 
@@ -77,7 +77,7 @@ exports.getUserOrder = (req, res, next) => {
 			})
 		})
 		.catch(error => {
-			console.error(error);
+			next(new Error(error));
 		});
 }
 
@@ -102,7 +102,7 @@ exports.postUserOrder = (req, res, next) => {
 		.then(() => {
 			res.redirect('/order');
 		})
-		.catch(err => {
-			console.error(err);
+		.catch(error => {
+			next(new Error(error));
 		});
 }

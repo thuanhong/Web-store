@@ -38,7 +38,7 @@ exports.postLogin = (req, res, next) => {
                         req.session.isLogged = true;
                         // Make sure session have been save before navigate
                         req.session.save(error => {
-                            console.error(error)
+                            next(new Error(error))
                             res.redirect('/')
                         })
                     } else {
@@ -47,14 +47,14 @@ exports.postLogin = (req, res, next) => {
                     }
                 })
         })
-        .catch(errror => {
-            console.error(errror)
+        .catch(error => {
+            next(new Error(error))
         })
 }
 
 exports.postLogout = (req, res, next) => {
     req.session.destroy(error => {
-        console.error(error)
+        next(new Error(error))
         res.redirect('/')
     })
 }
@@ -92,8 +92,8 @@ exports.postSignUp = (req, res, next) => {
                     })
                 })
         })
-        .catch(err => {
-            console.error(err)
+        .catch(error => {
+            next(new Error(error))
         })
 }
 
@@ -130,14 +130,14 @@ exports.postResetPassword = (req, res, next) => {
                 from: 'thuanhong@neo.com',
                 to: req.body.email,
                 subject: 'Reset password, link will expried after one hour',
-                html: `<a href="http://localhost:8080/auth/reset-password/${token}">Reset Password</a>`  
+                html: `<a href="http://thuanhong.herokuapp.com/auth/reset-password/${token}">Reset Password</a>`  
             }, (err, info) => {
                 if (err) console.error(err)
                 if (info) console.log(info)
             })
         })
         .catch(error => {
-            console.error(error)
+            next(new Error(error))
         })
     })
 }
@@ -160,7 +160,7 @@ exports.getNewPassword = (req, res, next) => {
             })
         })
         .catch(error => {
-            console.error(error)
+            next(new Error(error))
         })
 }
 
@@ -186,10 +186,10 @@ exports.postNewPassword = (req, res, next) => {
                         res.redirect('/auth/login')
                     })
                     .catch(error => {
-                        console.error(error)
+                        next(new Error(error))
                     })
         })
         .catch(error => {
-            console.error(error)
+            next(new Error(error))
         })
 }
