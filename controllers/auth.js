@@ -38,7 +38,9 @@ exports.postLogin = (req, res, next) => {
                         req.session.isLogged = true;
                         // Make sure session have been save before navigate
                         req.session.save(error => {
-                            next(new Error(error))
+                            if (error) {
+                                return next(new Error(error))
+                            }
                             res.redirect('/')
                         })
                     } else {
@@ -48,13 +50,15 @@ exports.postLogin = (req, res, next) => {
                 })
         })
         .catch(error => {
-            next(new Error(error))
+            return next(new Error(error))
         })
 }
 
 exports.postLogout = (req, res, next) => {
     req.session.destroy(error => {
-        next(new Error(error))
+        if (error) {
+            return next(new Error(error))
+        }
         res.redirect('/')
     })
 }
@@ -93,7 +97,7 @@ exports.postSignUp = (req, res, next) => {
                 })
         })
         .catch(error => {
-            next(new Error(error))
+            return next(new Error(error))
         })
 }
 
@@ -137,7 +141,7 @@ exports.postResetPassword = (req, res, next) => {
             })
         })
         .catch(error => {
-            next(new Error(error))
+            return next(new Error(error))
         })
     })
 }
@@ -160,7 +164,7 @@ exports.getNewPassword = (req, res, next) => {
             })
         })
         .catch(error => {
-            next(new Error(error))
+            return next(new Error(error))
         })
 }
 
@@ -186,10 +190,10 @@ exports.postNewPassword = (req, res, next) => {
                         res.redirect('/auth/login')
                     })
                     .catch(error => {
-                        next(new Error(error))
+                        return next(new Error(error))
                     })
         })
         .catch(error => {
-            next(new Error(error))
+            return next(new Error(error))
         })
 }

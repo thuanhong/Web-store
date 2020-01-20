@@ -13,7 +13,10 @@ exports.postAddProduct = (req, res, next) => {
     const title = req.body.title;
     const price = req.body.price;
     const description = req.body.description;
-	const imgURL = req.body.url;
+	const imgURL = req.file;
+
+	console.log(imgURL)
+
 	new Product({
 		title: title,
 		price: price,
@@ -24,7 +27,8 @@ exports.postAddProduct = (req, res, next) => {
 		.then(() => {
 			res.redirect('/admin/products');
 		}).catch(error => {
-			next(new Error(error))
+			console.log(error)
+			return next(new Error(error))
 		});
 };
 
@@ -47,7 +51,7 @@ exports.getEditProduct = (req, res, next) => {
 				product : product,
 			})
 	}).catch(error => {
-		next(new Error(error))
+		return next(new Error(error))
 	});
 };
 
@@ -69,7 +73,7 @@ exports.postEditProduct = (req, res, next) => {
 			res.redirect('/admin/products')
 		})
 	    }).catch(error => {
-	    	next(new Error(error))
+	    	return next(new Error(error))
     });
 
 };
@@ -77,7 +81,6 @@ exports.postEditProduct = (req, res, next) => {
 exports.getAllProducts = (req, res, next) => {
     Product.find({userId: req.user._id})
       .then(products => {
-		  	throw new Error("hoi bi ghe");
 			res.render('admin/products', {
 				products: products,
 				path: '/admin/products',
@@ -85,7 +88,7 @@ exports.getAllProducts = (req, res, next) => {
 			})
       })
       .catch(error => { 
-          next(new Error(error));
+          return next(new Error(error));
       });
 };
 
@@ -97,6 +100,6 @@ exports.deleteProduct = (req, res, next) => {
 			res.redirect('/admin/products')
 		})
 		.catch(error => {
-			next(new Error(error))
+			return next(new Error(error))
 		});
 };

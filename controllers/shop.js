@@ -9,7 +9,7 @@ exports.getIndex = (req, res, next) => {
 			title_page: "Home Page",
 		});
 	}).catch(error => {
-		next(new Error(error));
+		return next(new Error(error));
 	});
 };
 
@@ -24,7 +24,7 @@ exports.getProduct = (req, res, next) => {
 			});
 		})
 		.catch(error => {
-			next(new Error(error));
+			return next(new Error(error));
 		});
 };
 
@@ -38,7 +38,7 @@ exports.getCart = (req, res, next) => {
 			});
 		})
 		.catch(error => {
-			next(new Error(error))
+			return next(new Error(error))
 		});
 };
 
@@ -52,7 +52,7 @@ exports.postCart = (req, res, next) => {
 			res.redirect('/cart')
 		})
 		.catch(error => {
-			next(new Error(error))
+			return next(new Error(error))
 		})
 };
 
@@ -63,7 +63,7 @@ exports.postCartDelete = (req, res, next) => {
 			res.redirect('/cart');
 		})
 		.catch(error => {
-			next(new Error(error))
+			return next(new Error(error))
 		})
 }
 
@@ -77,7 +77,7 @@ exports.getUserOrder = (req, res, next) => {
 			})
 		})
 		.catch(error => {
-			next(new Error(error));
+			return next(new Error(error));
 		});
 }
 
@@ -103,6 +103,6 @@ exports.postUserOrder = (req, res, next) => {
 			res.redirect('/order');
 		})
 		.catch(error => {
-			next(new Error(error));
+			return next(new Error(error));
 		});
 }
