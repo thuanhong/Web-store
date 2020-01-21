@@ -16,11 +16,11 @@
             </div>
             <div class="w3-section">
                 <label class="w3-text-blue">Price</label>
-                <input class="w3-input w3-border" type="number" name="price" value="<% if (editing) {%><%= product.price %><% } %>" required>
+                <input class="w3-input w3-border" type="number" step="any" name="price" value="<% if (editing) {%><%= product.price %><% } %>" required>
             </div>
             <div class="w3-section">
                 <label class="w3-text-blue">Image URL</label>
-                <input class="w3-input w3-border" type="file" name="image" value="<% if (editing) {%><%= product.imageURL %><% } %>" required>
+                <input class="w3-input w3-border" type="file" name="image" <%= editing ? '' : 'required'%> />
             </div>
             <div class="w3-section">
                 <label class="w3-text-blue">Description</label>

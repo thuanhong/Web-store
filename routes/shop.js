@@ -13,4 +13,6 @@ router.post('/cart-delete', isAuth, shopController.postCartDelete);
 router.get('/order', isAuth, shopController.getUserOrder);
 router.post('/order', isAuth, shopController.postUserOrder);
 
+router.get('/order/:orderId', isAuth, shopController.getOrderFilePdf)
+
 module.exports = router;

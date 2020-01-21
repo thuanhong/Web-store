@@ -1,4 +1,14 @@
 const Product = require("../models/products");
+const fs = require('fs')
+
+
+const deleteFile = (filePath) => {
+	fs.unlink(filePath, (err) => {
+		if (err) {
+			console.error(err)
+		}
+	})
+}
 
 exports.getAddProduct = (req, res, next) => {
     res.render('admin/edit-product', {
@@ -15,19 +25,17 @@ exports.postAddProduct = (req, res, next) => {
     const description = req.body.description;
 	const imgURL = req.file;
 
-	console.log(imgURL)
-
 	new Product({
 		title: title,
 		price: price,
 		description: description,
-		imgURL: imgURL,
+		imageURL: '/' + imgURL.path,
 		userId: req.user
 	}).save()
 		.then(() => {
 			res.redirect('/admin/products');
 		}).catch(error => {
-			console.log(error)
+			console.error(error)
 			return next(new Error(error))
 		});
 };
@@ -60,18 +68,23 @@ exports.postEditProduct = (req, res, next) => {
     const title = req.body.title;
     const price = req.body.price;
     const description = req.body.description;
-	const imgURL = req.body.url;
+	const imgURL = req.file;
+
 	Product.findById(propID)
 	    .then(product => {
 			product.title = title;
 			product.price = price;
 			product.description = description;
-			product.imgURL = imgURL;
+			if (imgURL) {
+				deleteFile(product.imageURL.slice(1))
+				product.imageURL = '/' + imgURL.path;
+			}
 			product.save()
-		.then(() => {
-			console.log("UPDATED SUCCESSFUL")
-			res.redirect('/admin/products')
-		})
+				.then(() => {
+					console.log("UPDATED SUCCESSFUL")
+					res.redirect('/admin/products')
+				})
+				
 	    }).catch(error => {
 	    	return next(new Error(error))
     });
@@ -95,8 +108,9 @@ exports.getAllProducts = (req, res, next) => {
 exports.deleteProduct = (req, res, next) => {
 	let productID = req.params.productID;
 	Product.findByIdAndDelete(productID)
-		.then(() => {
+		.then(product => {
 			console.log('DELETE SUCCESSFULLY');
+			deleteFile(product.imageURL.slice(1))
 			res.redirect('/admin/products')
 		})
 		.catch(error => {
