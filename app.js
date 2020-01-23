@@ -10,6 +10,7 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 const csrf = require('csurf');
 const flash = require('connect-flash');
 const multer = require('multer');
+const mkdirp = require('mkdirp')
 require('dotenv').config();
 
 const MONGO_URI = process.env.MONGO_URI
@@ -29,7 +30,9 @@ app.set('views', 'views');
 
 const multerStore = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'images');
+    let dest = 'images/';
+    mkdirp.sync(dest);
+    cb(null, dest);
   },
   filename: (req, file, cb) => {
     cb(null, new Date().toISOString() + '-' + file.originalname);
