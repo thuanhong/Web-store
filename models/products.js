@@ -18,7 +18,6 @@ const products = new Schema({
 	imageURL: {
 		type: String,
 		required: true,
-		default: 'https://place-hold.it/300x200'
 	},
 	userId: {
 		type: Schema.Types.ObjectId,

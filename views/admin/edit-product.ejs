@@ -8,7 +8,7 @@
         <div class="w3-container w3-blue">
             <h2><%= action %>product</h2>
         </div>
-        <form class="w3-container" action="/admin/<% if (editing) { %>edit-product/<%= product._id %><% } else { %>add-product<% } %>" method="POST">
+        <form class="w3-container" action="/admin/<% if (editing) { %>edit-product/<%= product._id %><% } else { %>add-product<% } %>" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
             <div class="w3-section">
                 <label class="w3-text-blue">Title</label>
@@ -16,11 +16,11 @@
             </div>
             <div class="w3-section">
                 <label class="w3-text-blue">Price</label>
-                <input class="w3-input w3-border" type="text" name="price" value="<% if (editing) {%><%= product.price %><% } %>" required>
+                <input class="w3-input w3-border" type="number" step="any" name="price" value="<% if (editing) {%><%= product.price %><% } %>" required>
             </div>
             <div class="w3-section">
                 <label class="w3-text-blue">Image URL</label>
-                <input class="w3-input w3-border" type="text" name="url" value="<% if (editing) {%><%= product.imageURL %><% } %>" required>
+                <input class="w3-input w3-border" type="file" name="image" <%= editing ? '' : 'required'%> />
             </div>
             <div class="w3-section">
                 <label class="w3-text-blue">Description</label>

@@ -32,6 +32,20 @@
                         </div>
                     <% } %>
                 </div>
+                <div class="w3-center">
+                    <div class="w3-bar">
+                        <%  %>
+                        <a href="/?page=1" class="w3-button" title="Go first page">&laquo;</a>
+                        <% if (previous) { %>
+                            <a href="/?page=<%= previous %>" class="w3-button"><%= previous %></a>
+                        <% } %>
+                        <a href="#" class="w3-button w3-teal"><%= current %></a>
+                        <% if (next) { %>
+                            <a href="/?page=<%= next %>" class="w3-button"><%= next %></a>
+                        <% } %>
+                        <a href="/?page=last" class="w3-button" title="Go last page">&raquo;</a>
+                    </div>
+                </div>
             <% } else { %>
                 <p class="w3-center w-3-xxlarge">No Product</p>
             <% } %>

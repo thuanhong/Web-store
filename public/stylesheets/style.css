@@ -2,3 +2,14 @@ div.w3-container.w3-center > img {
     height: 20vh;
     width: 80%;
 }
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance:textfield;
+}

@@ -9,6 +9,7 @@ const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const csrf = require('csurf');
 const flash = require('connect-flash');
+const multer = require('multer');
 require('dotenv').config();
 
 const MONGO_URI = process.env.MONGO_URI
@@ -26,9 +27,30 @@ const authRouter = require('./routes/auth');
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
+const multerStore = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'images');
+  },
+  filename: (req, file, cb) => {
+    cb(null, new Date().toISOString() + '-' + file.originalname);
+  }
+});
+
+const fileFilter = (req, file, cb) => {
+  if (['image/png', 'image/jpg', 'image/jpeg'].includes(file.mimetype)) {
+    cb(null, true)
+  } else {
+    cb(null, false)
+  }
+}
+
 app.use(flash())
 app.use(bodyPaser.urlencoded({extended: false}));
+app.use(multer({storage: multerStore, fileFilter: fileFilter}).single('image'))
+
+app.use('/images', express.static(path.join(__dirname, 'images')))
 app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(session({secret: 'my-session', resave: false, saveUninitialized: false, store: store}));
 
 app.use(csrfProtection);
@@ -58,8 +80,9 @@ app.use(shopRouter);
 app.use(errorController.get404);
 
 app.use((error, req, res, next) => {
+  console.error(error)
   res.status(500).render('error/error500', {
-    path: '',
+    path: '/500',
     title_page: 'Server Error',
   });
 })
