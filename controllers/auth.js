@@ -83,17 +83,8 @@ exports.postSignUp = (req, res, next) => {
                     return newUser.save();
                 })
                 .then(() => {
-                    req.flash('success', 'Register successfull, please check your mail to verify your account')
-                    res.redirect('/auth/login')
-                    return tranporter.sendMail({
-                        from: 'thuanhong@neo.com',
-                        to: email,
-                        subject: 'Verify your email',
-                        html: '<a href="https://github.com/">Click to verify</a>'   
-                    }, (err, info) => {
-                        if (err) console.error(err)
-                        if (info) console.log(info)
-                    })
+                    req.flash('success', 'Register successfull')
+                    return res.redirect('/auth/login')
                 })
         })
         .catch(error => {
