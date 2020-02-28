@@ -46,16 +46,22 @@ exports.getProduct = (req, res, next) => {
 
 exports.getCart = (req, res, next) => {
 	let total = 0;
+	let ls_products = []
 
 	req.user.populate('cart.productId').execPopulate()
 		.then(user => {
 			user.cart.map(product => {
-				total += product.quantity * product.productId.price
+				try {
+					total += product.quantity * product.productId.price
+					ls_products.push(product)
+				} catch (e) {
+					console.log(e)
+				}
 			})
 			res.render('shop/cart', {
 				path: '/cart',
 				title_page: 'Your Cart',
-				products : user.cart,
+				products : ls_products,
 				total: total
 			});
 		})
@@ -109,16 +115,19 @@ exports.postUserOrder = (req, res, next) => {
 	// Get the payment token ID submitted by the form:
 	const token = req.body.stripeToken; // Using Express
 	let total = 0;
+	let products = [];
 
 	req.user.populate('cart.productId').execPopulate()
 		.then(user => {
 			user.cart.map(product => {
-				total += product.quantity * product.productId.price
+				try {
+					total += product.quantity * product.productId.price
+					products.push({quantity : item.quantity, product: {...item.productId._doc}})
+				} catch (e) {
+					console.error(e)
+				}
 			})
-			
-			const products = user.cart.map(item => {
-				return {quantity : item.quantity, product: {...item.productId._doc}}
-			})
+
 			const newOrder = new Orders({
 				products: products,
 				user: {
