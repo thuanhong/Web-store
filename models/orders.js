@@ -12,6 +12,10 @@ const Orders = new Schema({
     user: {
         name: { type: String, required: true },
         userId: { type: Schema.Types.ObjectId, required: true }
+    },
+    date: {
+        required: true,
+        type: Date
     }
 })
 

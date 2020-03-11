@@ -2,7 +2,7 @@ const Products = require("../models/products");
 const Orders = require('../models/orders');
 const PDFDoc = require('pdfkit');
 
-const ITEM_PER_PAGE = 2
+const ITEM_PER_PAGE = 4
 
 const stripe = require('stripe')('sk_test_XCBLPdt9IhXbuBmIWMK2103g00wYNyLsvM');
 
@@ -122,7 +122,7 @@ exports.postUserOrder = (req, res, next) => {
 			user.cart.map(product => {
 				try {
 					total += product.quantity * product.productId.price
-					products.push({quantity : item.quantity, product: {...item.productId._doc}})
+					products.push({quantity : product.quantity, product: {...product.productId._doc}})
 				} catch (e) {
 					console.error(e)
 				}
@@ -133,7 +133,8 @@ exports.postUserOrder = (req, res, next) => {
 				user: {
 					name : user.name,
 					userId: user._id
-				}
+				},
+				date: Date.now()
 			})
 			return newOrder.save()
 		})

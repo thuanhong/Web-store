@@ -1,6 +1,6 @@
 div.w3-container.w3-center > img {
     height: 20vh;
-    width: 80%;
+    width: 100%;
 }
 
 input::-webkit-outer-spin-button,
@@ -12,4 +12,15 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type=number] {
   -moz-appearance:textfield;
+}
+
+main {
+  margin-bottom: 32px;
+}
+
+footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
 }

@@ -2,8 +2,6 @@
 
 > Build a web application have authenticate, add, edit product from user, order and checkout cart.
 
-### [Demo website](thuanhong.herokuapp.com)
-
 ## Prerequisites
 
 * node >= 12.14.1
@@ -15,11 +13,33 @@
 npm install
 ```
 
+Edit the content in .env file with your mongodb uri
+
 ## Usage
 
 ```sh
 npm start
 ```
+
+## Sreenshot
+
+Authentication
+
+![Authentication screenshot](resource/authenticate.gif "Authentication")
+
+Manage products
+
+![Manage products screenshot](resource/manage.gif "Manage products")
+
+Pagination
+
+![Pagination screenshot](resource/pagination.gif "Pagination")
+
+Payment
+
+![Payment screenshot](resource/payment.gif "Payment")
+
+
 
 ## Author
 
